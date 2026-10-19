@@ -49,6 +49,8 @@ class Gate(Exchange):
             PriceType.MARK: 1,
             PriceType.INDEX: 2,
         },
+        # Futures candle volume ("v") is in contracts, not base currency
+        "ohlcv_volume_in_contracts": True,
     }
 
     _supported_trading_mode_margin_pairs: list[tuple[TradingMode, MarginMode]] = [
@@ -131,3 +133,13 @@ class Gate(Exchange):
                                 "rate": pair_fees[takerOrMaker],
                             }
         return trades
+
+
+class GateEU(Gate):
+    """Gate.io EU exchange class.
+    Minimal adjustment to disable futures trading for the EU version of gate.io.
+    """
+
+    _supported_trading_mode_margin_pairs: list[tuple[TradingMode, MarginMode]] = [
+        (TradingMode.SPOT, MarginMode.NONE),
+    ]
